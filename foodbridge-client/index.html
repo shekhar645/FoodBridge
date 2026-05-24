@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodBridge — Surplus Food, Shared Hope</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      // Generate circular favicon from logo.png using canvas
+      window.addEventListener('load', function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.src = '/logo.png';
+        img.onload = function () {
+          // Draw circle clip
+          ctx.beginPath();
+          ctx.arc(32, 32, 32, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+          // White background
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, 64, 64);
+          // Draw logo inside circle
+          ctx.drawImage(img, 4, 4, 56, 56);
+          // Set as favicon
+          const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
+          link.rel = 'icon';
+          link.href = canvas.toDataURL('image/png');
+          document.head.appendChild(link);
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
