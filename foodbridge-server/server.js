@@ -3,6 +3,7 @@ const express  = require("express");
 const helmet   = require("helmet");
 const cors     = require("cors");
 const morgan   = require("morgan");
+const https    = require("https");
 const rateLimit = require("express-rate-limit");
 
 const authRoutes         = require("./routes/auth");
@@ -34,7 +35,7 @@ const limiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 10,
   message: { success: false, message: "Too many auth attempts. Please wait 15 minutes." },
 });
 
@@ -75,6 +76,15 @@ app.listen(PORT, () => {
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health\n`);
 });
 
-startCron(); // ← auto-expire donations every 5 minutes
+startCron();
+
+// ─── Keep alive (Render free tier) ────────────────────────────
+setInterval(() => {
+  https.get("https://foodbridge-server.onrender.com/api/health", (res) => {
+    console.log("Keep-alive ping sent ✅");
+  }).on("error", (err) => {
+    console.log("Ping error:", err.message);
+  });
+}, 10 * 60 * 1000);
 
 module.exports = app;
