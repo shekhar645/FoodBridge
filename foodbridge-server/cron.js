@@ -1,12 +1,8 @@
-// cron.js — auto-expire donations past their best_before time
-// Place this file in: foodbridge-server/cron.js
-// It is started from server.js
-
-const db = require("./db/connection");
+const pool = require("./db/connection");
 
 async function expireDonations() {
   try {
-    const [result] = await db.query(
+    const [result] = await pool.execute(
       `UPDATE donations
        SET status = 'expired'
        WHERE status = 'available'
@@ -21,9 +17,7 @@ async function expireDonations() {
 }
 
 function startCron() {
-  // Run immediately on start
   expireDonations();
-  // Then every 5 minutes
   setInterval(expireDonations, 5 * 60 * 1000);
   console.log("⏰ Cron job started — checking for expired donations every 5 minutes");
 }
