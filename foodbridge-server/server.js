@@ -80,7 +80,7 @@ startCron();
 
 // ─── Keep alive (Render free tier) ────────────────────────────
 setInterval(() => {
-  https.get("https://foodbridge-server.onrender.com/api/health", (res) => {
+  https.get("https://foodbridge-dbf6.onrender.com/api/health", (res) => {
     console.log("Keep-alive ping sent ✅");
   }).on("error", (err) => {
     console.log("Ping error:", err.message);
