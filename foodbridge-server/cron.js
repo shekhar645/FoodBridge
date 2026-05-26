@@ -2,7 +2,7 @@ const pool = require("./db/connection");
 
 async function expireDonations() {
   try {
-    const [result] = await pool.execute(
+    const [result] = await pool.query(
       `UPDATE donations
        SET status = 'expired'
        WHERE status = 'available'
